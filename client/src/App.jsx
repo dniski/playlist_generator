@@ -1,12 +1,33 @@
-import { useState } from 'react'
+import { useState, useEffect} from 'react'
 import styles from './index.module.css'
 import spotifyLogo from './assets/social.png'
+
+
 function App() {
-  const [count, setCount] = useState(0)
   const [playlistName, setPlaylistName] = useState("");
   const [playlistDescription, setPlaylistDescription] = useState("");
   const [playlistLength, setPlaylistLength] = useState(0); 
   const [playlist, setPlaylist] = useState("");
+  const [token, setToken] = useState("")
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    let token = window.localStorage.getItem("token");
+    if (!token && hash) {
+      token = hash.substring(1).split("&").find((elem) => elem.startsWith("access_token")).split("=")[1];
+      window.location.hash = "";
+      window.localStorage.setItem("token", token);
+    }
+    setToken(token);
+  }, []);
+
+  const spotifyLogin = () => {
+    const clientId = '2dfa0bd8422646c5b4a759b9b42398ed';
+    const redirectUri = "http://localhost:5173/";
+    const scopes = ['playlist-modify-public'];
+    const url = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scopes)}`;
+    window.location = url;
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -26,9 +47,14 @@ function App() {
     const data = await response.json();
     return data.response;
   } 
+
+
   return(
     <main className={styles.main}>
-      <img  src={spotifyLogo} alt="" className={styles.icon}/>
+    <img  src={spotifyLogo} alt="" className={styles.icon}/>
+      { token? (
+        <>
+      
       <h3>Generate music playlist with AI: </h3>
 
       <form action="" onSubmit={onSubmit}>
@@ -54,6 +80,13 @@ function App() {
         <pre>{playlist}</pre>
 
       </form>
+      </>
+      ) : (
+        <>
+          <h3>Generate music playlist with AI: </h3>
+          <button onClick={spotifyLogin}>Log In To Start</button>
+        </>
+      )}
     </main>
   )
 }

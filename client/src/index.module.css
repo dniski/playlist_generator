@@ -72,7 +72,24 @@
     padding: 12px 16px;
     border: 1px solid #10a37f;
     border-radius: 4px;
-    margin-bottom: 24px; /* Adjust this value to add space */
+    margin-bottom: 24px; 
     outline-color: #10a37f;
 }
+
+.main button {
+  padding: 12px 10px;
+  color: #fff;
+  background-color: #10a37f;
+  border: none;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 20px;
+  font-family: "ColfaxAI", Helvetica, sans-serif;
+  
+}
+
+
   
